@@ -35,12 +35,18 @@
         </van-notice-bar>
 
         <!-- 商品列表 -->
-        <product-list :products="productList" />
+        <van-list
+            v-model:loading="state.loading"
+            :finished="state.finished"
+            finished-text="没有更多了"
+            @load="loadProducts">
+            <product-list :products="productList" />
+        </van-list>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { getDefalutData } from '@/api/index.js'
 import { getProducts } from '@/api/product.js'
 import ProductList from '@/components/ProductList.vue'
@@ -66,15 +72,30 @@ const newsList = computed(() => {
 
 // 商品列表
 const productList = ref([])
+const state = reactive({
+  loading: false,
+  finished: false
+})
 
-let page = 1, limit = 8
-const getProductsData = async () => {
-    const { data } = await getProducts({ page, limit })
+let page = 1, limit = 4
+
+const loadProducts = async () => {
+    
+    const { data } = await getProducts({ limit, page })
     if (data.status !== 200) return
-
     productList.value.push(...data.data)
+
+    // 加载状态结束
+    state.loading = false
+
+    // 数据全部加载完成
+    if (data.data.length < limit) {
+        state.finished = true
+        return
+    }
+    page++
 }
-getProductsData()
+// loadProducts()
 
 </script>
 
