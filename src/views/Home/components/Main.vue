@@ -8,6 +8,31 @@
                 <img :src="item.img" />    
             </van-swipe-item>
         </van-swipe>
+
+        <!-- 菜单列表 -->
+        <van-grid column-num="4" icon-size="36" :border="false">
+            <van-grid-item
+                v-for="(item, index) in menusList"
+                :key="index"
+                :icon="item.img" :text="item.info[0].value" />
+        </van-grid>
+
+        <!-- 通知栏 -->
+        <van-notice-bar left-icon="volume-o" :scrollable="false">
+            <p>热点资讯公告：</p>
+            <van-swipe
+                vertical
+                class="notice-swipe"
+                :touchable="false"
+                :autoplay="3000"
+                :show-indicators="false">
+                <van-swipe-item
+                    v-for="(item, index) in newsList"
+                    :key="index"
+                    v-text="item.chiild[0].val"
+                />
+            </van-swipe>
+        </van-notice-bar>
     </div>
 </template>
 
@@ -27,6 +52,12 @@ getData()
 const swipeList = computed(() => {
     return defaultData.value.swiperBg?.default.imgList.list
 })
+const menusList = computed(() => {
+    return defaultData.value.menus?.default.imgList.list
+})
+const newsList = computed(() => {
+    return defaultData.value.news?.default.newList.list
+})
 
 </script>
 
@@ -39,6 +70,17 @@ const swipeList = computed(() => {
     .my-swipe img{
         width: 100%;
         height: 170px;
+    }
+
+    // ::v-deep .van-notice-bar__content {
+    :deep(.van-notice-bar__content) {
+        display: flex;
+        align-items: center;
+    }
+
+    .notice-swipe {
+        height: 40px;
+        line-height: 40px;
     }
 }
 </style>
