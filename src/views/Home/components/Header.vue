@@ -16,6 +16,7 @@ header {
     height: 50px;
     align-items: center;
     background-color: #fff;
+    z-index: 9;
     .search {
         width: 100%;
         height: 30px;

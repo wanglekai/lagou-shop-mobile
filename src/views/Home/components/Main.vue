@@ -33,12 +33,17 @@
                 />
             </van-swipe>
         </van-notice-bar>
+
+        <!-- 商品列表 -->
+        <product-list :products="productList" />
     </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { getDefalutData } from '@/api/index.js'
+import { getProducts } from '@/api/product.js'
+import ProductList from '@/components/ProductList.vue'
 
 let defaultData = ref({})
 
@@ -59,11 +64,23 @@ const newsList = computed(() => {
     return defaultData.value.news?.default.newList.list
 })
 
+// 商品列表
+const productList = ref([])
+
+let page = 1, limit = 8
+const getProductsData = async () => {
+    const { data } = await getProducts({ page, limit })
+    if (data.status !== 200) return
+
+    productList.value.push(...data.data)
+}
+getProductsData()
+
 </script>
 
 <style lang="scss" scoped>
 .home-main {
-    padding: 50px 0;
+    padding: 50px 0 60px;
     font-size: 18px;
     background-color: #e4e4e4;
 
