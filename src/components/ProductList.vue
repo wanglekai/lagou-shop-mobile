@@ -15,16 +15,23 @@
     </van-grid>
 </template>
 
-<script setup>
-
-// import { defineProps } from 'vue'
-
-const { products } = defineProps({
-    products: {
-        required: true,
-        type: Array
+<script>
+// <script setup>
+export default {
+    props: {
+        products: {
+            required: true,
+            type: Array
+        }
     }
-})
+}
+// import { defineProps } from 'vue'
+// const { products } = defineProps({
+//     products: {
+//         required: true,
+//         type: Array
+//     }
+// })
 
 </script>
 

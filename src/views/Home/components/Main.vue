@@ -1,5 +1,5 @@
 <template>
-    <div class="home-main">
+    <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="home-main">
         <!-- 轮播图区域 -->
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
             <van-swipe-item
@@ -42,7 +42,7 @@
             @load="loadProducts">
             <product-list :products="productList" />
         </van-list>
-    </div>
+    </van-pull-refresh>
 </template>
 
 <script setup>
@@ -52,11 +52,14 @@ import { getProducts } from '@/api/product.js'
 import ProductList from '@/components/ProductList.vue'
 
 let defaultData = ref({})
+let refreshing  = ref(false)
 
 const getData = async () => {
     const { data } = await getDefalutData()
     if (data.status !== 200) return
     defaultData.value = data.data
+    
+    return Promise.resolve()
 }
 getData()
 
@@ -94,8 +97,31 @@ const loadProducts = async () => {
         return
     }
     page++
+    return Promise.resolve()
 }
 // loadProducts()
+
+// 下拉刷新
+
+const onRefresh = () => {
+    defaultData.value = {}
+    productList.value = []
+
+    page = 1
+
+    Promise.all([getData(), loadProducts()]).then(()=>{
+        // console.log('111');
+        state.finished = false
+        refreshing.value =false
+    })
+    // getData().then(() => {
+    //     state.finished = false
+    //     loadProducts()
+    //     refreshing.value =false
+    // })
+    // loadProducts()
+    
+}
 
 </script>
 
