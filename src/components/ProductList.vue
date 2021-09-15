@@ -6,7 +6,8 @@
         :center="false">
         <van-grid-item
             v-for="item in products"
-            :key="item.id">
+            :key="item.id"
+            :to="{name: 'product', params: { productId: item.id }}">
             <img :src="item.image" />
             <h3 class="title">{{ item.store_name }} </h3>
             <p class="price">￥ {{ item.price }}</p>
