@@ -54,7 +54,10 @@
         </van-grid-item>
       </van-grid>
     </van-tab>
-    <van-tab title="详情">内容 4</van-tab>
+    <van-tab title="详情" class="product-detail">
+      <h3>商品详情</h3>
+      <div class="descripion" v-html="storeInfo?.description"></div>
+    </van-tab>
   </van-tabs>
 </template>
 
@@ -193,6 +196,20 @@ onBeforeRouteUpdate(to => {
         color: #f22b2b;
         font-size: 14px;
       }
+    }
+  }
+  .product-detail {
+    margin-top: 10px;
+    background-color: #fff;
+    h3 {
+      padding: 10px;
+      font-size: 18px;
+    }
+  }
+  :deep(.descripion) {
+    width: 100%;
+    img {
+      width: 100%;
     }
   }
 
