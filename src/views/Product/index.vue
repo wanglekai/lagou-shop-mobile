@@ -66,7 +66,12 @@
     </van-popup>
     <van-tab title="评价" >
       <van-cell-group v-if="reply.replyCount" class="comments-area">
-        <van-cell :border="false" title="用户评价(2)" is-link  value="100%好评率" />
+        <van-cell
+          :border="false" 
+          title="用户评价(2)" 
+          is-link
+          value="100%好评率"
+          :to="{ name: 'comments', params: { productId: storeInfo.id } }"/>
         <comment-item :reply="reply" />
       </van-cell-group>
       <van-cell v-else>
