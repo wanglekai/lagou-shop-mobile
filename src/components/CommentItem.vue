@@ -3,13 +3,13 @@
           <div class="user">
             <img :src="reply.avatar" alt="">
             <span class="nick-name">{{ reply.nickname }}</span>
-            <van-rate v-model="reply.replyCount" readonly size="14"/>
+            <van-rate v-model="reply.product_score" readonly size="14"/>
           </div>
           <div class="user-comments">
             <div class="comments-top"> {{ reply.add_time }} {{ reply.sku }} </div>
             <p class="content">{{ reply.comment }}</p>
             <ul class="comment-imgs">
-              <li v-for="(item, index) in reply.cart_info?.productInfo.slider_image" :key="index" >
+              <li v-for="(item, index) in imgs" :key="index" >
                   <img :src="item" alt="">
               </li>
             </ul>
@@ -24,6 +24,15 @@ export default {
             type: Object,
             required: true
         }
+    },
+    computed: {
+      imgs () {
+        if (this.reply.cart_info) {
+          return this.reply.cart_info.productInfo.slider_image
+        } else {
+          return this.reply.pics
+        }
+      }
     }
 }
 </script>
