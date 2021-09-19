@@ -83,7 +83,7 @@
       <van-cell title="推荐商品" title-style="font-weight:bold; font-size: 18px;" />
       <van-grid :column-num="3" class="list" :border="false">
         <van-grid-item
-          v-for="item in defaultData.good_list"
+          v-for="item in defaultData?.good_list"
           :key="item.id"
           :to="{ name: 'product', params: { productId: item.id } }">
           <img :src="item.image" alt="">
@@ -107,7 +107,6 @@ import {  onBeforeRouteUpdate ,useRouter } from "vue-router";
 import ProductListVue from '../../components/ProductList.vue';
 
 const router = useRouter();
-
 const { productId } = defineProps({
   productId: {
     required: true,
@@ -128,7 +127,7 @@ const initGetData = async (productId) => {
 initGetData(productId);
 
 const storeInfo = computed(() => {
-  return defaultData.value.storeInfo;
+  return defaultData.value?.storeInfo;
 });
 const swipeImgs = computed(() => {
   return storeInfo.value?.slider_image;
