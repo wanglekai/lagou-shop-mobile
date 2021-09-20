@@ -62,6 +62,9 @@ import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { useCountDown } from '@vant/use';
 import * as userApi from '../../api/user'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const router = useRouter()
 
@@ -109,9 +112,9 @@ const handleBackClick = () => {
 }
 
 // 登录提交操作
-const onSubmit = async (data) => {
+const onSubmit = async (dataInfo) => {
   // console.log(data);
-  let { password, phone, captcha } = data
+  let { password, phone, captcha } = dataInfo
 
   if ( phone.trim() === '' ) return Toast.fail('请输入手机号')
   phone = parseInt(phone)
@@ -121,21 +124,24 @@ const onSubmit = async (data) => {
   if (state.mode === 'captcha' && captcha.trim() === '') return Toast.fail('请填写验证码')
 
 
+  let data = ''
   if (state.mode === 'psd') {
     // 密码登录
-    const { data } = await userApi.loginByPassword({ account: phone, password })
-    if (data.status !== 200) {
-      return Toast.fail(data.msg)
-    }
-    console.log(data);
+    ({ data } = await userApi.loginByPassword({
+      account: phone, password 
+    }))
   } else {
     // 验证码登录
-    const { data } = await userApi.loginByCaptcha({ phone, captcha })
-    if (data.status !== 200) return Toast.fail(data.msg)
-
-    console.log(data);
+    ({ data } = await userApi.loginByCaptcha({ phone, captcha }))
   }
-
+  if (data.status !== 200) return Toast.fail(data.msg)
+  // console.log(data);
+  try {
+    store.commit('setUser', data.data.token)
+    router.push('/user')
+  } catch {
+    Toast.fail('抱歉，出现异常，请稍后重试')
+  }
 };
 
 // 倒计时
