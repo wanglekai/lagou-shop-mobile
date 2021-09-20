@@ -25,11 +25,11 @@
     />
     <van-field
       v-show="!currentMode"
-      v-model="state.verifCode"
+      v-model="state.captcha"
       center
       clearable
       label="短信验证码"
-      name="verifCode"
+      name="captcha"
       placeholder="请输入短信验证码"
     >
       <template #button>
@@ -61,6 +61,7 @@ import { computed, reactive, ref } from "@vue/reactivity";
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { useCountDown } from '@vant/use';
+import * as userApi from '../../api/user'
 
 const router = useRouter()
 
@@ -68,7 +69,7 @@ const state = reactive({
   mode: "psd",
   phone: "",
   password: "",
-  verifCode: "", // 验证码
+  captcha: "", // 验证码
 });
 
 const currentBtnTxt = computed(() => {
@@ -77,13 +78,14 @@ const currentBtnTxt = computed(() => {
 })
 const currentMode = computed(() => state.mode === 'psd')
 
+// 登录按钮是否禁用
 const isLogin = computed(() => {
   if (state.phone.trim() === '') return true
 
   if (state.mode === 'psd' && state.password.trim() !== '') {
     return false
   }
-  if (state.mode === 'captcha' && state.verifCode.trim() !== '') {
+  if (state.mode === 'captcha' && state.captcha.trim() !== '') {
     return false
   }
   return true
@@ -97,7 +99,7 @@ const handleToggleMode = () => {
     state.mode = 'psd'
   }
   state.password = ''
-  state.verifCode = ''
+  state.captcha = ''
 }
 // 返回按钮 
 const handleBackClick = () => {
@@ -106,26 +108,32 @@ const handleBackClick = () => {
   return router.push({name: 'home'})
 }
 
-
-const onSubmit = (data) => {
+// 登录提交操作
+const onSubmit = async (data) => {
   // console.log(data);
-  let { password, phone, verifCode } = data
+  let { password, phone, captcha } = data
 
   if ( phone.trim() === '' ) return Toast.fail('请输入手机号')
   phone = parseInt(phone)
   if ( !/1\d{10}$/.test(phone) ) return Toast.fail('手机号码格式不正确')
 
   if (state.mode === 'psd' && password.trim() === '') return Toast.fail('请输入密码')
-  if (state.mode === 'captcha' && verifCode.trim() === '') return Toast.fail('请填写验证码')
+  if (state.mode === 'captcha' && captcha.trim() === '') return Toast.fail('请填写验证码')
 
 
-  // console.log(password);
   if (state.mode === 'psd') {
-    console.log('手机号: ', phone);
-    console.log('密码: ', password);
+    // 密码登录
+    const { data } = await userApi.loginByPassword({ account: phone, password })
+    if (data.status !== 200) {
+      return Toast.fail(data.msg)
+    }
+    console.log(data);
   } else {
-    console.log('手机号: ', phone);
-    console.log('验证码', verifCode)
+    // 验证码登录
+    const { data } = await userApi.loginByCaptcha({ phone, captcha })
+    if (data.status !== 200) return Toast.fail(data.msg)
+
+    console.log(data);
   }
 
 };
@@ -141,10 +149,22 @@ const countDown = useCountDown({
 })
 const current = countDown.current
 
-const countDownTxt = computed(() => {
-  return isSend.value ? current.seconds : '发送验证码'
-})
-const countDownStart = () => {
+const countDownStart = async () => {
+
+  if ( state.phone.trim() === '' ) return Toast.fail('请输入手机号')
+
+  const { data: v1 } = await userApi.getVerifyCode()
+  // console.log(data);
+  if (v1.status !== 200) return Toast.fail(data.msg)
+
+  const { data: v2 } = await userApi.getVerify({
+    type: 'login',
+    phone: state.phone,
+    key: v1.data.key
+  })
+
+  console.log(v2);
+
   isSend.value = true
   countDown.start()
 }
