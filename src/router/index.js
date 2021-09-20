@@ -26,7 +26,8 @@ const routes = [
         path: '/order-detail',
         name: 'order-detail',
         component: () => import('@/views/OrderDetail/index.vue'),
-        props: true
+        props: true,
+        meta: { requireAuth: true }
     },
     {
         path: '/product/:productId',
@@ -43,22 +44,26 @@ const routes = [
     {
         path: '/order',
         name: 'order',
-        component: () => import('@/views/Order/index.vue')
+        component: () => import('@/views/Order/index.vue'),
+        meta: { requireAuth: true }
     },
     {
         path: '/pay',
         name: 'pay',
-        component: () => import('@/views/Pay/index.vue')
+        component: () => import('@/views/Pay/index.vue'),
+        meta: { requireAuth: true }
     },
     {
         path: '/cart',
         name: 'cart',
-        component: () => import('@/views/Cart/index.vue')
+        component: () => import('@/views/Cart/index.vue'),
+        meta: { requireAuth: true }
     },
     {
         path: '/user',
         name: 'user',
-        component: () => import('@/views/User/index.vue')
+        component: () => import('@/views/User/index.vue'),
+        meta: { requireAuth: true }
     },
     {
         path: '/search',
@@ -80,6 +85,22 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+import store from '../store'
+
+router.beforeEach(to => {
+
+    if (!to.meta.requireAuth) return true
+
+    if (!store.state.user.token || !window.localStorage.getItem('USER_TOKEN')) {
+        return {
+            name: 'login',
+            query: {
+                redirect: to.fullPath
+            }
+        }
+    }
 })
 
 export default router

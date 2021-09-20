@@ -58,20 +58,20 @@
 
 <script setup>
 import { computed, reactive, ref } from "@vue/reactivity";
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { Toast } from 'vant'
 import { useCountDown } from '@vant/use';
 import * as userApi from '../../api/user'
 import { useStore } from 'vuex'
 
 const store = useStore()
-
 const router = useRouter()
+const route = useRoute()
 
 const state = reactive({
   mode: "psd",
-  phone: "",
-  password: "",
+  phone: "17201234567",
+  password: "qwer1234",
   captcha: "", // 验证码
 });
 
@@ -138,7 +138,9 @@ const onSubmit = async (dataInfo) => {
   // console.log(data);
   try {
     store.commit('setUser', data.data.token)
-    router.push('/user')
+    // console.log(route.query.redirect);
+    router.push(route.query.redirect)
+    // router.push('/')
   } catch {
     Toast.fail('抱歉，出现异常，请稍后重试')
   }
