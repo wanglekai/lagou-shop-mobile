@@ -84,8 +84,9 @@ initUserInfo()
 
 <style lang="scss" scoped>
 .container {
-  height: 100vh;
-  background-color: #e8e8e8;
+  height: 600px;
+  padding: 15px 0;
+  background: radial-gradient(circle at 50% -10%, #FBC546 72%, #F6F7F9 72%) #F6F7F9 0 -300px no-repeat;
 }
 .user-header {
   display: flex;
