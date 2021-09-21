@@ -1,6 +1,6 @@
 <template>
   <van-nav-bar left-arrow fixed @click-left="router.go(-1)" />
-  <van-tabs v-model="active" scrollspy>
+  <van-tabs v-model="active" class="product-container" scrollspy>
     <van-tab title="商品">
       <van-swipe class="my-swipe" :autoplay="3000" height="375">
         <van-swipe-item v-for="(item, index) in swipeImgs" :key="index">
@@ -28,7 +28,7 @@
         </van-cell>
       </van-cell-group>
       <van-cell is-link class="user-select" @click="showPopup">
-        <template #title> 已选择: </template>
+        <template #title> 已选择: {{ sku }}</template>
       </van-cell>
     </van-tab>
     <van-popup v-model:show="showSku" position="bottom" class="pop-sku-wrap">
@@ -97,6 +97,14 @@
       <div class="descripion" v-html="storeInfo?.description"></div>
     </van-tab>
   </van-tabs>
+
+  <van-action-bar class="foot-bar">
+    <van-action-bar-icon icon="chat-o" text="客服" color="#ee0a24" />
+    <van-action-bar-icon icon="cart-o" text="购物车" to="/cart" />
+    <van-action-bar-icon icon="star" text="已收藏" color="#ff5000" />
+    <van-action-bar-button type="warning" text="加入购物车"  @click="handleAddCart" />
+    <van-action-bar-button type="danger" text="立即购买" />
+  </van-action-bar>
 </template>
 
 <script setup>
@@ -215,6 +223,49 @@ const handleTagChange = (tag, specIndex) => {
   specState.spec[specIndex] = tag
 }
 
+// **************** 加购**********************
+
+import { useStore } from 'vuex'
+import { addToCart } from '../../api/cart'
+import { Dialog, Toast } from 'vant';
+const store = useStore()
+
+const handleAddCart = async () => {
+
+  if (!store.state.user.token) return router.push({
+    name: 'login',
+    query: {
+      redirect: router.currentRoute.value.fullPath
+    }
+  })
+
+  if (sku.value in productValue.value) {
+
+    let uniqueId = productValue.value[sku.value].unique
+    // 发送请求，将数据加入购物车
+    const { data } = await addToCart({
+      new: 0, // 0 代表加入购物车操作，1 代表立即购买
+      uniqueId,
+      productId,
+      cartNum: specState.buyCount
+    })
+    // console.log(data);
+    if (data.status !== 200) return Toast.fail(data.msg)
+
+    Dialog.confirm({
+      title: '已加入购物车',
+      message: '是否前去购物车看看？',
+      cancelButtonText: '不了, 继续逛逛'
+    }).then(() => {
+      router.push('/cart')
+    }).catch(() => {
+      showSku.value = false
+    })
+  } else {
+    showSku.value = true
+  }
+}
+
 </script>
 
 
@@ -236,6 +287,9 @@ const handleTagChange = (tag, specIndex) => {
   height: 375px;
 }
 
+.product-container {
+  padding-bottom: 50px;
+}
 .van-tabs {
   background-color: #f4f4f4;
 
@@ -367,6 +421,8 @@ const handleTagChange = (tag, specIndex) => {
       justify-content: space-between;
     }
   }
-
+}
+.foot-bar {
+  z-index: 9999;
 }
 </style>
