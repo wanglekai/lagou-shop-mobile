@@ -1,8 +1,9 @@
 <template>
   <van-nav-bar title="购物车" />
-  <div class="cart-list">
+  <div class="cart-list" v-if="notEmpty">
     <cart-item v-for="cart in cartList" :key="cart.id" :cart="cart" />
   </div>
+  <van-empty v-else description="购物车空空如也~" />
   <van-submit-bar :price="3050" button-text="提交订单" @submit="onSubmit">
     <van-checkbox v-model="checked" checked-color="#ee0a24">全选</van-checkbox>
   </van-submit-bar>
@@ -12,18 +13,46 @@
 <script setup>
 import LayoutFooter from "@/components/LayoutFooter.vue";
 import CartItem from './CartIitem.vue'
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
 import { getCartList } from "../../api/cart";
 import { Toast } from "vant";
+import { useStore } from 'vuex'
+import { nextTick } from "@vue/runtime-core";
 
-const cartList = ref([])
+const store = useStore()
+
+const cartList = computed(() => store.state.cartList)
+
+const notEmpty = computed(() => cartList.value.length  > 0)
 
 const initCartList = async () => {
   const { data } = await getCartList();
 
   if (data.status !== 200) return Toast.fail(data.msg)
 
-  cartList.value = data.data.valid
+  store.commit('clearCart')
+  
+  await nextTick()
+
+  const result = data.data
+
+  result.valid.forEach(item => {
+    store.commit('addCartItem', {
+      id: item.id,
+      productId: item.product_id,
+      cart_num: item.cart_num,
+      image: item.productInfo.image,
+      price: item.truePrice,
+      stock: item.trueStock,
+      store_name: item.productInfo.store_name,
+      checked: item.attrStatus,
+      sku: item.productInfo.attrInfo.sku
+    })
+  });
+
+
+  // cartList.value = data.data.valid
+
 };
 
 initCartList();

@@ -1,16 +1,20 @@
 <template>
     <div class="cart-item">
-        <van-checkbox v-model="checked" checked-color="#ee0a24" />
-        <div class="cart-info">
-            <img :src="productInfo.image" alt="">
+        <van-checkbox class="check-box" v-model="cart.checked" checked-color="#ee0a24" />
+        <div class="cart-info"  @click="toDetail">
+            <img :src="cart.image" alt="">
             <div class="cart-detail">
-                <p class="title">{{ productInfo.store_name }}</p>
+                <p class="title">{{ cart.store_name }}</p>
                 <div class="cart-num">
                     <span class="price">￥ {{ currentPrice }}</span>
-                    <van-stepper v-model="cart.cart_num" :max="productInfo.stock" button-size="24" />
+                    <van-stepper
+                        @click.stop
+                        v-model="cart.cart_num" 
+                        :max="cart.stock" 
+                        button-size="24" />
                 </div>
                 <div class="other">
-                    <span class="sku">{{ productInfo.attrInfo.sku }}</span>
+                    <span class="sku">{{ cart.sku }}</span>
                     <span class="btn-delete">删除</span>
                 </div>
             </div>
@@ -28,17 +32,20 @@ export default {
         }
     },
     computed: {
-        productInfo () {
-            return this.cart.productInfo
-        },
         currentPrice () {
-            return parseFloat(this.cart.productInfo.attrInfo.price) * this.cart.cart_num
+            let res = parseFloat(this.cart.price) * this.cart.cart_num
+            return parseFloat(res.toFixed(2))
         }
     },
-    data () {
-        return {
-            checked: true,
-            count: 1
+    methods: {
+        toDetail () {
+            // console.log(this.$router);
+            this.$router.push({
+                name: 'product',
+                params: {
+                    productId: this.cart.productId
+                }
+            })
         }
     }
 }
@@ -49,6 +56,10 @@ export default {
 .cart-item {
     display: flex;
     padding: 0 10px;
+    :deep(.check-box) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
     .cart-info {
         display: flex;
         flex: 1;
