@@ -11,6 +11,22 @@ export default createStore({
             cartList: []
         }
     },
+    getters: {
+        // 选中状态的 购物车列表
+        checkedItem (state) {
+            return state.cartList.filter(item => item.checked)
+        },
+        // 选中商品的 总价
+        totalPrice (state, getters) {
+            return getters.checkedItem.reduce((sum, item) => { 
+                return sum + parseFloat(item.price) * item.cart_num
+             }, 0)
+        },
+        // 是否全选
+        isCheckAll (state, getters) {
+            return getters.checkedItem.length === state.cartList.length
+        }
+    },
     mutations: {
         setUser (state, playload) {
             state.user.token = playload
@@ -39,6 +55,9 @@ export default createStore({
             } else {
                 Toast.fail('修改购物车数量异常')
             }
+        },
+        checkAllOrNot (state, checked) {
+            state.cartList.forEach(item => item.checked = checked)
         }
     },
     actions: {

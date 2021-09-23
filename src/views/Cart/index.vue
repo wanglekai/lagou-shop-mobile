@@ -4,8 +4,8 @@
     <cart-item v-for="cart in cartList" :key="cart.id" :cart="cart" />
   </div>
   <van-empty v-else description="购物车空空如也~" />
-  <van-submit-bar :price="3050" button-text="提交订单" @submit="onSubmit">
-    <van-checkbox v-model="checked" checked-color="#ee0a24">全选</van-checkbox>
+  <van-submit-bar :price="store.getters.totalPrice * 100" button-text="提交订单" @submit="onSubmit">
+    <van-checkbox v-model="isCheckedAll" checked-color="#ee0a24">全选</van-checkbox>
   </van-submit-bar>
   <layout-footer />
 </template>
@@ -13,7 +13,7 @@
 <script setup>
 import LayoutFooter from "@/components/LayoutFooter.vue";
 import CartItem from './CartIitem.vue'
-import { computed, ref } from "@vue/reactivity";
+import { computed } from "@vue/reactivity";
 import { getCartList } from "../../api/cart";
 import { Toast } from "vant";
 import { useStore } from 'vuex'
@@ -24,6 +24,13 @@ const store = useStore()
 const cartList = computed(() => store.state.cartList)
 
 const notEmpty = computed(() => cartList.value.length  > 0)
+
+const isCheckedAll = computed({
+  get: () => store.getters.isCheckAll,
+  set (value) {
+    store.commit('checkAllOrNot', value)
+  }
+})
 
 const initCartList = async () => {
   const { data } = await getCartList();
@@ -57,7 +64,6 @@ const initCartList = async () => {
 
 initCartList();
 
-const checked = ref(true)
 </script>
 
 <style lang="scss" scoped>

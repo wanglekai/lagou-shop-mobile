@@ -55,6 +55,14 @@ export default {
                 return this.cart.cart_num
             },
             set (value) {
+
+                if (!this.cart.checked) {
+                    store.commit('changeChecked', {
+                        id: this.cart.id,
+                        checked: true
+                    })
+                }
+
                 store.dispatch('changeCartNum', {
                     id: this.cart.id,
                     cart_num: value
