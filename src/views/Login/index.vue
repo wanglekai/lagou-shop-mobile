@@ -63,10 +63,23 @@ import { Toast } from 'vant'
 import { useCountDown } from '@vant/use';
 import * as userApi from '../../api/user'
 import { useStore } from 'vuex'
-
+import { onBeforeMount } from "@vue/runtime-core";
+// onBeforeMount
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
+
+onBeforeMount(() => {
+  // console.log();
+  if (store.state.user && store.state.user.token) {
+    // console.log(route);
+    
+    Toast.success('以登录过了')
+    setTimeout(() => {
+      router.push('/user')
+    }, 1000);
+  }
+})
 
 const state = reactive({
   mode: "psd",
