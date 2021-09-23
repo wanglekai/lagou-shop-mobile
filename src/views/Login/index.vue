@@ -71,7 +71,7 @@ const route = useRoute()
 
 onBeforeMount(() => {
   // console.log();
-  if (store.state.user && store.state.user.token) {
+  if (store.state.User && store.state.User.token) {
     // console.log(route);
     
     Toast.success('以登录过了')
@@ -150,7 +150,7 @@ const onSubmit = async (dataInfo) => {
   if (data.status !== 200) return Toast.fail(data.msg)
   // console.log(data);
   try {
-    store.commit('setUser', data.data.token)
+    store.commit('user/setUser', data.data.token)
     // console.log(route.query.redirect);
     router.push(route.query.redirect)
     // router.push('/')

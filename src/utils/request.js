@@ -7,7 +7,7 @@ const requset = axios.create({
 })
 
 requset.interceptors.request.use(config => {
-    const { token } = store.state.user
+    const { token } = store.state.User
 
     if (token) {
         config.headers.Authorization = 'Bearer ' + token

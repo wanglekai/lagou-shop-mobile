@@ -4,7 +4,7 @@
     <cart-item v-for="cart in cartList" :key="cart.id" :cart="cart" />
   </div>
   <van-empty v-else description="购物车空空如也~" />
-  <van-submit-bar :price="store.getters.totalPrice * 100" button-text="提交订单" @submit="onSubmit">
+  <van-submit-bar :price="store.getters['Cart/totalPrice'] * 100" button-text="提交订单" @submit="onSubmit">
     <van-checkbox v-model="isCheckedAll" checked-color="#ee0a24">全选</van-checkbox>
   </van-submit-bar>
   <layout-footer />
@@ -21,14 +21,14 @@ import { nextTick } from "@vue/runtime-core";
 
 const store = useStore()
 
-const cartList = computed(() => store.state.cartList)
+const cartList = computed(() => store.state.Cart.cartList)
 
 const notEmpty = computed(() => cartList.value.length  > 0)
 
 const isCheckedAll = computed({
-  get: () => store.getters.isCheckAll,
+  get: () => store.getters['Cart/isCheckAll'],
   set (value) {
-    store.commit('checkAllOrNot', value)
+    store.commit('Cart/checkAllOrNot', value)
   }
 })
 
@@ -37,14 +37,14 @@ const initCartList = async () => {
 
   if (data.status !== 200) return Toast.fail(data.msg)
 
-  store.commit('clearCart')
+  store.commit('Cart/clearCart')
   
   await nextTick()
 
   const result = data.data
 
   result.valid.forEach(item => {
-    store.commit('addCartItem', {
+    store.commit('Cart/addCartItem', {
       id: item.id,
       productId: item.product_id,
       cart_num: item.cart_num,
