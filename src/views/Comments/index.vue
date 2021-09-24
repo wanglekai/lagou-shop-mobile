@@ -1,5 +1,5 @@
 <template>
-    <van-nav-bar left-arrow fixed @click-left="router.go(-1)" />
+    <top-bar title="" />
     <van-cell-group :border="false">
         <van-cell
             class="comments-title"
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import TopBar from '@/components/TopBar.vue'
 
 import CommentItem from '@/components/CommentItem.vue'
 import { computed, defineProps, reactive, ref } from 'vue'

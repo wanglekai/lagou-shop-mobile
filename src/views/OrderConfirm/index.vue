@@ -1,9 +1,5 @@
 <template>
-  <van-nav-bar
-    title="确定订单"
-    left-text="返回"
-    left-arrow
-  />
+  <top-bar title="确认订单" />
   <main class="container">
     <div class="default-address">
       <p>{{ currentUser }}</p>
@@ -13,6 +9,7 @@
 </template>
 
 <script setup>
+import TopBar from '@/components/TopBar.vue'
 
 const { cartId } = defineProps({
   cartId: {
@@ -43,16 +40,9 @@ const initAddressList = async () => {
 }
 initAddressList()
 
-
-
-
 </script>
 
 <style lang="scss" scoped>
-.van-nav-bar {
-  position: fixed;
-  width: 100%;
-}
 main.container {
   padding: 50px 0;
   .default-address {

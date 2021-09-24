@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar left-arrow fixed @click-left="router.go(-1)" />
+  <top-bar title="" />
   <van-tabs v-model="active" class="product-container" scrollspy>
     <van-tab title="商品">
       <van-swipe class="my-swipe" :autoplay="3000" height="375">
@@ -108,6 +108,8 @@
 </template>
 
 <script setup>
+import TopBar from '@/components/TopBar.vue'
+
 import CommentItem from '@/components/CommentItem.vue'
 import { getProductDetails } from "@/api/product";
 import { computed, reactive, ref } from "@vue/reactivity";
@@ -121,6 +123,7 @@ const { productId } = defineProps({
     type: String,
   },
 });
+console.log(router);
 
 const defaultData = ref({});
 

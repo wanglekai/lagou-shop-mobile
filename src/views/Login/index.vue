@@ -1,10 +1,5 @@
 <template>
-  <van-nav-bar
-    title="登录"
-    left-text="返回"
-    left-arrow
-    @click-left="handleBackClick"
-  />
+  <top-bar title="登录" />
   <van-form @submit="onSubmit">
     <van-field
       v-model="state.phone"
@@ -57,6 +52,7 @@
 </template>
 
 <script setup>
+import TopBar from '@/components/TopBar.vue'
 import { computed, reactive, ref } from "@vue/reactivity";
 import { useRouter, useRoute } from 'vue-router'
 import { Toast } from 'vant'
@@ -182,6 +178,9 @@ const countDownStart = async () => {
 </script>
 
 <style scoped>
+.van-form {
+  padding-top: 50px;
+}
 .toggle-mode-btn {
   color: rgb(119, 119, 119);
   font-size: 16px;
