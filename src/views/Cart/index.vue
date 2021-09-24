@@ -66,6 +66,11 @@ initCartList();
 // 提交订单
 const router = useRouter()
 const onSubmit = () => {
+
+  // 进入确认订单之前 缓存一下 选中的商品，
+  // 避免在确认订单页刷新时 vuex 中的数据被清空
+  window.localStorage.setItem('curOrder', JSON.stringify(store.getters['Cart/checkedItem']))
+
   router.push({
     name: 'order-confirm',
     params: {
