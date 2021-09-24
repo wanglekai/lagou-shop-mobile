@@ -2,11 +2,11 @@ import axios from 'axios'
 import router from '../router'
 import store from '../store'
 
-const requset = axios.create({
+const request = axios.create({
     baseURL: 'https://shop.fed.lagou.com/api'
 })
 
-requset.interceptors.request.use(config => {
+request.interceptors.request.use(config => {
     const { token } = store.state.User
 
     if (token) {
@@ -15,7 +15,7 @@ requset.interceptors.request.use(config => {
     return config
 })
 
-requset.interceptors.response.use(config => {
+request.interceptors.response.use(config => {
     const { data } = config
 
     if (data.status === 410000) {
@@ -30,4 +30,4 @@ requset.interceptors.response.use(config => {
     return config
 })
 
-export default requset
+export default request

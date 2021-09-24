@@ -48,6 +48,13 @@ const routes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/order-confirm/:cartId',
+        name: 'order-confirm',
+        component: () => import('@/views/OrderConfirm/index.vue'),
+        props: true,
+        meta: { requireAuth: true }
+    },
+    {
         path: '/pay',
         name: 'pay',
         component: () => import('@/views/Pay/index.vue'),

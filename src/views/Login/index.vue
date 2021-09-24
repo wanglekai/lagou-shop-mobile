@@ -63,23 +63,12 @@ import { Toast } from 'vant'
 import { useCountDown } from '@vant/use';
 import * as userApi from '../../api/user'
 import { useStore } from 'vuex'
-import { onBeforeMount } from "@vue/runtime-core";
+// import { onBeforeMount } from "@vue/runtime-core";
 // onBeforeMount
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
-onBeforeMount(() => {
-  // console.log();
-  if (store.state.User && store.state.User.token) {
-    // console.log(route);
-    
-    Toast.success('以登录过了')
-    setTimeout(() => {
-      router.push('/user')
-    }, 1000);
-  }
-})
 
 const state = reactive({
   mode: "psd",
@@ -150,7 +139,7 @@ const onSubmit = async (dataInfo) => {
   if (data.status !== 200) return Toast.fail(data.msg)
   // console.log(data);
   try {
-    store.commit('user/setUser', data.data.token)
+    store.commit('User/setUser', data.data.token)
     // console.log(route.query.redirect);
     router.push(route.query.redirect)
     // router.push('/')

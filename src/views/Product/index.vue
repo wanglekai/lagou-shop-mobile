@@ -232,7 +232,7 @@ const store = useStore()
 
 const handleAddCart = async () => {
 
-  if (!store.state.user.token) return router.push({
+  if (!store.state.User.token) return router.push({
     name: 'login',
     query: {
       redirect: router.currentRoute.value.fullPath
