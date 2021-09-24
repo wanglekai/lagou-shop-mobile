@@ -105,10 +105,7 @@ export default {
             height: 100px;
         }
         p.title {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            @include line-clamp;
             font-size: 14px;
         }
         span.price {

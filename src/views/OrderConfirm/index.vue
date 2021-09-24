@@ -105,16 +105,13 @@ main.container {
       margin-left: 10px;
       .title {
         font-size: 16px;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        @include line-clamp;
       }
       .other {
         display: flex;
         justify-content: space-between;
         .price {
-          color: #ee0a24;
+          color: $theme-color;
         }
       }
     }

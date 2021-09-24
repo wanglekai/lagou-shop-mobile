@@ -54,16 +54,13 @@ export default {
         text-overflow: ellipsis;
         font-size: 14px;
         font-weight: normal;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        @include line-clamp(2);
       }
       p.price, p.info {
           padding-left: 8px;
       }
       p.price {
-          color: #f55929;
+          color: $theme-color;
           font-size: 18px;
           font-weight: bold;
       }

@@ -9,5 +9,12 @@ export default defineConfig({
     alias: [
       { find: '@', replacement: resolve(__dirname, 'src')}
     ]
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "./src/styles/global.scss";'
+      }
+    }
   }
 })

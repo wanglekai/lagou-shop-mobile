@@ -311,10 +311,7 @@ const handleAddCart = async () => {
       font-weight: bold;
     }
     .pro-name {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      @include line-clamp(2);
       font-size: 16px;
     }
     :deep(.content) {
@@ -341,10 +338,7 @@ const handleAddCart = async () => {
       }
       .title {
         padding: 4px 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        @include line-clamp(2);
         font-size: 14px;
       }
       .price {
@@ -383,10 +377,7 @@ const handleAddCart = async () => {
       .info {
         margin-left: 10px;
         .title {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          @include line-clamp;
           font-size: 18px;
           font-weight: bold;
         }
