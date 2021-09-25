@@ -42,6 +42,13 @@ const routes = [
         props: true
     },
     {
+        path: '/address/:addressId',
+        name: 'address',
+        component: () => import('@/views/AddAddress/index.vue'),
+        meta: { requireAuth: true },
+        props: true
+    },
+    {
         path: '/order',
         name: 'order',
         component: () => import('@/views/Order/index.vue'),

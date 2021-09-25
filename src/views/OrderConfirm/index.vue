@@ -21,8 +21,8 @@
         :list="addressList"
         default-tag-text="默认"
         @click-item="selectAddress"
-        @add="onAdd"
-        @edit="onEdit">
+        @add="addNewAddress(0)"
+        @edit="(item)=>{ addNewAddress(item.id, item) }">
         <template #top>
           <van-empty v-if="isEmpty" description="还没添加过地址哦~" />
         </template>
@@ -55,6 +55,7 @@ import { computed, ref, toRaw } from '@vue/reactivity'
 import { Toast } from 'vant'
 import { getAddressList } from '../../api/address'
 import { useStore } from 'vuex'
+import { areaList } from "@vant/area-data";
 
 const store = useStore()
 
@@ -71,14 +72,35 @@ const totalNum = computed(() => confirmOrders.value?.reduce((sum, item) => {
   return sum + item.cart_num
 }, 0))
 
-console.log(confirmOrders.value);
-
 const { cartId } = defineProps({
   cartId: {
     type: String,
     required: true
   }
 })
+
+const findAreaCode = county => {
+  for (let key in areaList.county_list) {
+    if (areaList.county_list[key] === county) {
+      return key
+    }
+  }
+}
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const addNewAddress = (id, address = {}) => {
+  console.log(address);
+  router.push({
+    name: 'address',
+    params: { 
+      addressId: id, 
+      address: JSON.stringify(address),
+      areaCode: findAreaCode(address.address?.split(',')[2])
+    }
+  })
+}
 
 // ******************地址选择***************
 
@@ -102,7 +124,7 @@ const converData = data => ({
   id: data.id,
   name: data.real_name,
   tel: data.phone,
-  address: `${data.province}, ${data.district}, ${data.detail}`,
+  address: `${data.province},${data.city},${data.district},${data.detail}`,
   isDefault: data.is_default === 1
 })
 
