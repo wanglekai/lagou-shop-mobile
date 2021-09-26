@@ -5,6 +5,7 @@
   </div>
   <van-empty v-else description="购物车空空如也~" />
   <van-submit-bar
+    :disabled="disabled"
     :price="store.getters['Cart/totalPrice'] * 100"
     button-text="提交订单" @submit="onSubmit">
     <van-checkbox v-model="isCheckedAll" checked-color="#ee0a24">全选</van-checkbox>
@@ -25,6 +26,7 @@ import { useRouter } from "vue-router";
 const store = useStore()
 
 const cartList = computed(() => store.state.Cart.cartList)
+const disabled = computed(() => cartList.value.length === 0)
 
 const notEmpty = computed(() => cartList.value.length  > 0)
 
@@ -69,7 +71,7 @@ const onSubmit = () => {
 
   // 进入确认订单之前 缓存一下 选中的商品，
   // 避免在确认订单页刷新时 vuex 中的数据被清空
-  window.localStorage.setItem('curOrder', JSON.stringify(store.getters['Cart/checkedItem']))
+  // window.localStorage.setItem('curOrder', JSON.stringify(store.getters['Cart/checkedItem']))
 
   router.push({
     name: 'order-confirm',

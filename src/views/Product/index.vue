@@ -244,7 +244,7 @@ const handleAddCart = async () => {
 
   if (sku.value in productValue.value) {
 
-    let uniqueId = productValue.value[sku.value].unique
+    let uniqueId = productValue.value?.[sku.value].unique
     // 发送请求，将数据加入购物车
     const { data } = await addToCart({
       new: 0, // 0 代表加入购物车操作，1 代表立即购买

@@ -62,6 +62,13 @@ const routes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/order-status/:orderId',
+        name: 'order-status',
+        component: () => import('@/views/OrderStatus/index.vue'),
+        props: true,
+        meat: { requireAuth: true }
+    },
+    {
         path: '/pay',
         name: 'pay',
         component: () => import('@/views/Pay/index.vue'),
