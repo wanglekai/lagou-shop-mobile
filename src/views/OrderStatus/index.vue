@@ -44,6 +44,14 @@
             </li>
         </ul>
     </div>
+    <div class="footer-btns">
+            <van-button round to="/">
+                返回首页
+            </van-button>
+            <van-button type="danger" round to='/order'>
+                查看购物车列表
+            </van-button>
+        </div>
 </div>
 </template>
 
@@ -144,5 +152,13 @@ queryCurrentOrder()
             }
         }
     }
+}
+.footer-btns {
+    // padding: 0 50px;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 </style>
