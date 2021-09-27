@@ -49,7 +49,7 @@
                 返回首页
             </van-button>
             <van-button type="danger" round to='/order'>
-                查看购物车列表
+                查看订单列表
             </van-button>
         </div>
 </div>

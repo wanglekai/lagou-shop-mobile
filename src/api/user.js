@@ -14,3 +14,6 @@ export const loginByPassword = data => request.post('/login', data)
 
 // 获取用户信息
 export const getUserInfo = () => request.get('/user')
+
+// 重置密码
+export const resetPassword = data => request.post('/register/reset', data)

@@ -9,7 +9,7 @@
         <p class="nick-name">{{nickname}}</p>
         <p class="u-id">{{uid}}</p>
       </div>
-      <van-icon name="setting-o" />
+      <van-icon name="setting-o" @click="router.push('/setting')" />
     </header>
 
     <main>
@@ -57,7 +57,10 @@
 import LayoutFooter from "@/components/LayoutFooter.vue";
 import { computed, ref } from "@vue/reactivity";
 import { Toast } from "vant";
+import { useRouter } from "vue-router";
 import { getUserInfo } from '../../api/user'
+
+const router = useRouter()
 
 const userInfo = ref({})
 const switchUserInfo = computed(() => userInfo.value?.switchUserInfo)

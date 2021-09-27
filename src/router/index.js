@@ -75,6 +75,18 @@ const routes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: () => import('@/views/ResetPassword/index.vue'),
+        meta: { requireAuth: true }
+    },
+    {
+        path: '/setting',
+        name: 'setting',
+        component: () => import('@/views/Setting/index.vue'),
+        meta: { requireAuth: true }
+    },
+    {
         path: '/cart',
         name: 'cart',
         component: () => import('@/views/Cart/index.vue'),

@@ -134,14 +134,17 @@ const onSubmit = async (dataInfo) => {
   }
   if (data.status !== 200) return Toast.fail(data.msg)
   // console.log(data);
-  try {
-    store.commit('User/setUser', data.data.token)
+  store.commit('User/setUser', data.data.token)
     // console.log(route.query.redirect);
-    router.push(route.query.redirect)
-    // router.push('/')
-  } catch {
-    Toast.fail('抱歉，出现异常，请稍后重试')
-  }
+  router.push(route.query.redirect)
+  // try {
+  //   store.commit('User/setUser', data.data.token)
+  //   // console.log(route.query.redirect);
+  //   router.push(route.query.redirect)
+  //   // router.push('/')
+  // } catch {
+  //   Toast.fail('抱歉，出现异常，请稍后重试')
+  // }
 };
 
 // 倒计时
