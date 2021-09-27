@@ -1,4 +1,5 @@
 <template>
+<div class="contaner">
     <van-nav-bar
         fixed
         title="订单详情"
@@ -7,45 +8,52 @@
         @click-left="onClickLeft"
     /> 
     <div class="content">
-        <div>
-            <p> 订单创建时间： {{ defauleData._add_time }}</p>
-            <p>{{ defauleData._status._title }} </p>
+        <div class="content-item">
+            <p><span class="desc">订单号：</span> {{ orderId }}</p>
+            <p> <span class="desc">订单创建时间：</span> {{ defauleData._add_time }}</p>
+        </div>
+        <div class="content-item">
             <div class="status">
                 <img :src="defauleData.status_pic" alt="">
-                <p>{{ defauleData._status._msg }}</p>
+                <div class="detail">
+                    <p>{{ defauleData._status._msg }}</p>
+                    <p> 
+                        <span>{{ defauleData._status._title }}</span>, 
+                        <span>金额: {{ defauleData.pay_price }}</span>
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="address">
+        <div class="address content-item">
             <p>
-                <span>{{ defauleData.user.name }}</span>
-                <span>{{ defauleData.user.phone }}</span>
+                <span>收件人：{{ defauleData.user.name }}</span>， 
+                <span>联系电话：{{ defauleData.user.phone }}</span>
             </p>
-            <p>{{ defauleData.user.address }}</p>
+            <p>收货地址： {{ defauleData.user.address }}</p>
         </div>
-        <ul class="order-cart-list">
+        <ul class="order-cart-list content-item">
             <li v-for="item in cartList" :key="item.id">
                 <img :src="item.productInfo.image" alt="image" />
-                <!-- <p>{{ item.productInfo.re }}</p> -->
+                <div class="info">
+                    <p>{{ item.productInfo.store_name }}</p>
+                <p>
+                    <span>数量： {{ item.cart_num }}</span>
+                    <span>单价: {{ item.truePrice }}</span>
+                </p>
+                </div>
             </li>
         </ul>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
-        <p>内容很长</p>
     </div>
+</div>
 </template>
 
 <script setup>
 import { computed, reactive } from '@vue/reactivity'
 import { Toast } from 'vant'
+import { useRouter } from 'vue-router'
 import { getOrderById } from '../../api/order'
+
+const router = useRouter()
 
 const { orderId } = defineProps({
     orderId: {
@@ -59,12 +67,13 @@ const defauleData = reactive({
     _status: {},
     cartInfo: [],
     user: {},
-    _add_time: ''
+    _add_time: '',
+    pay_price: ''
 })
 const cartList = computed(() => defauleData.cartInfo)
 
 const onClickLeft = () => {
-
+    router.push({name: 'home'})
 }
 
 const queryCurrentOrder = async () => {
@@ -81,20 +90,58 @@ const queryCurrentOrder = async () => {
     defauleData.user.name = result.real_name
     defauleData.user.phone = result.user_phone
     defauleData.user.address = result.user_address
+    defauleData.pay_price = result.pay_price
 }
 queryCurrentOrder()
 
 </script>
 
 <style lang="scss" scoped>
+.contaner {
+    background-color: #efefef;
+}
 .content {
     margin-top: 50px;
-    padding: 10px;
-    font-size: 16px; 
+    // padding: 10px;
+    font-size: 14px; 
+    .content-item {
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #fff;
+    }
+
     .status {
+        display: flex;
         img {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
+        }
+        .detail {
+            padding: 10px 0;
+            margin-left: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    }
+    .address {
+
+    }
+    .order-cart-list {
+        margin: 10px 0;
+        li {
+            display: flex;
+            img {
+                width: 80px;
+                height: 80px;
+            }
+            p {
+                @include line-clamp;
+                span {
+                    margin-right: 20px;
+                }
+            }
         }
     }
 }

@@ -114,6 +114,7 @@ import CommentItem from '@/components/CommentItem.vue'
 import { getProductDetails } from "@/api/product";
 import { computed, reactive, ref } from "@vue/reactivity";
 import {  onBeforeRouteUpdate ,useRouter } from "vue-router";
+// import { onMounted, onUpdated } from 'vue'
 import ProductListVue from '../../components/ProductList.vue';
 
 const router = useRouter();
@@ -150,7 +151,10 @@ const reply = computed(() => {
     replyCount: defaultData.value?.replyCount
   }
 })
-
+const specState = reactive({
+  spec: [],
+  buyCount: 1
+})
 /**
  * vue 会保存组件的状态，切换时会缓存
  * 使用 路由导航守卫，检测 路由参数的变化
@@ -158,6 +162,11 @@ const reply = computed(() => {
  */
 onBeforeRouteUpdate(to => {
   defaultData.value = {}
+  specState.spec = []
+  
+
+  console.log(to)
+
 
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
@@ -180,10 +189,7 @@ const productValue = computed(() => {
   return defaultData.value?.productValue
 })
 
-const specState = reactive({
-  spec: [],
-  buyCount: 1
-})
+
 
 const sku = computed(() => specState.spec.toString())
 const specDetail = computed(() => productValue.value?.[sku.value])
